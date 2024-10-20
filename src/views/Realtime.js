@@ -29,16 +29,21 @@ export default function Realtime() {
   };
 
   useEffect(() => {
-    iLogger.connectToServer()
+    iLogger.connectToServer();
 
     const pushInData = (data) => {
-      setNewData((prevData) => [...prevData, data]);
+      console.log(data)
+      const parsedData =data;
+
+      console.log(parsedData)
+      setNewData((prevData) => [...prevData, parsedData]);
 
       // Update log counts
-      setLogCounts((prevCounts) => ({
-        ...prevCounts,
-        [data.typeLog]: (prevCounts[data.typeLog] || 0) + 1,
-      }));
+      setLogCounts((prevCounts) => {
+        const newCounts = { ...prevCounts };
+        newCounts[parsedData.typeLog] = (newCounts[parsedData.typeLog] || 0) + 1;
+        return newCounts;
+      });
     };
 
     iLogger.listenLogs(pushInData);
@@ -85,16 +90,18 @@ export default function Realtime() {
   };
 
   return (
-    <>
-      <div className="content">
-        <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Realtime</CardTitle>
-              </CardHeader>
-              <CardBody>
-              <div className="table-responsive" style={{ maxHeight: "400px", overflowY: "auto", overflowX: "hidden" }}>
+    <div className="content">
+      <Row>
+        <Col md="12">
+          <Card>
+            <CardHeader>
+              <CardTitle tag="h4">Realtime</CardTitle>
+            </CardHeader>
+            <CardBody>
+              <div
+                className="table-responsive"
+                style={{ maxHeight: "400px", overflowY: "auto", overflowX: "hidden" }}
+              >
                 <Table responsive style={{ overflowX: "hidden" }}>
                   <thead className="text-primary">
                     <tr>
@@ -102,7 +109,8 @@ export default function Realtime() {
                       <th>Mensaje</th>
                       <th>Fecha</th>
                       <th>Host</th>
-                      <th>Modulo</th>
+                      <th>Módulo</th>
+                      <th>Protocolo</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -113,37 +121,37 @@ export default function Realtime() {
                         <td>{data.date}</td>
                         <td>{data.host}</td>
                         <td>{data.module}</td>
+                        <td>{data.protocol}</td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Estadisticas de los Logs</CardTitle>
-              </CardHeader>
-              <CardBody style={{ height: "266px" }}>
-                <Pie data={chartData} options={chartOptions} />
-              </CardBody>
-              <CardFooter>
-                <div className="legend">
-                  <i className="fa fa-circle" style={{ color: colors.info }} /> Info{" "}
-                  <i className="fa fa-circle" style={{ color: colors.warning }} /> Warning{" "}
-                  <i className="fa fa-circle" style={{ color: colors.error }} /> Error{" "}
-                  <i className="fa fa-circle" style={{ color: colors.debug }} /> Debug
-                </div>
-                <hr />
-              </CardFooter>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    </>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col md="12">
+          <Card>
+            <CardHeader>
+              <CardTitle tag="h5">Estadísticas de los Logs</CardTitle>
+            </CardHeader>
+            <CardBody style={{ height: "266px" }}>
+              <Pie data={chartData} options={chartOptions} />
+            </CardBody>
+            <CardFooter>
+              <div className="legend">
+                <i className="fa fa-circle" style={{ color: colors.info }} /> Info{" "}
+                <i className="fa fa-circle" style={{ color: colors.warning }} /> Warning{" "}
+                <i className="fa fa-circle" style={{ color: colors.error }} /> Error{" "}
+                <i className="fa fa-circle" style={{ color: colors.debug }} /> Debug
+              </div>
+              <hr />
+            </CardFooter>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 }

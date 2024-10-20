@@ -1,0 +1,4 @@
+{
+  "protocol": "tcp",
+  "data": "{'typeLog':'info','data':'Calculation successful: 2948','date':'2024-10-14T15:11:32.275Z','module':'calculator','host':'192.168.125.126:54866','protocol':'udp'}"
+}
